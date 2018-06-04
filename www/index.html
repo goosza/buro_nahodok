@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+     
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <style>
+        .posts{
+            height:100%;
+            position:fixed;
+            top:8%;
+           overflow:auto;
+        }
+        .search{
+            position:fixed;
+            bottom:0%;
+        }
+        .menu{
+            top:0%;
+            position:fixed;
+        }.
+        .postsno2{
+            position:absolute;
+            top:10%;
+        }
+    </style>
+</head>
+<body>
+    <nav class="menu  light-green darken-3">
+     <a href="#" data-target="slide-out" class="sidenav-trigger">
+         <i class="material-icons">menu</i>
+     </a>
+     <div class="button" style="margin-left:85%">
+          <a href="new_post.html" >
+             <i class="material-icons" >add_circle</i> 
+          </a>
+     </div>
+    </nav>
+
+  <ul id="slide-out" class="sidenav">
+    <div class="row">
+      <div class="card">
+        <div class="card-image">
+          <img src="img/binokl.jpg">
+        </div>
+      </div>
+    </div>
+       
+      
+    <li><a href="index.html">Главная</a></li>
+    <li><div class="divider"></div></li>
+    <li><a href="found.html">Найдено</a></li>
+    <li><a href="lost.html">Потеряно</a></li>
+    <li><div class="divider"></div></li>
+    <li><a href="myposts.html">Мои объявления</a></li>
+    
+  </ul>
+  
+
+ <div class="posts  lime lighten-5">
+    <div class="postsno2">
+        
+  
+    </div> 
+ </div>
+    
+  <nav class="search">
+    <div class="nav-wrapper">
+      <form>
+        <div class="input-field light-green darken-1">
+          <input id="search" type="search" required>
+          <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+          <i class="material-icons">close</i>
+        </div>
+      </form>
+    </div>
+  </nav>
+
+        
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js">
+    </script>
+    <script>
+        $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+        
+        var input=document.querySelector("input");
+        var posts=document.querySelector(".postsno2");
+        var btn=document.querySelector(".button");
+        $(document).ready(function(){
+            $.ajax({
+                url:"http://192.168.1.38:8000/getAll",
+                success:function(arg){
+                    console.log(arg);
+                    for (var i=0;i<arg.length;i++){
+                       posts.style.height=arg.length*200+200+"px";
+                        div_row=document.createElement("div");
+                        div_card=document.createElement("div");
+                        div_card_content=document.createElement("div");
+                        div_row.classList.add("row"); 
+                        div_card.classList.add("card","white", "darken-1");
+                        div_card.style.height=170+"px";
+                        div_card.style.width=96+"%";
+                        div_card.style.left=2+"%";
+                       div_card_content.classList.add("card-content","black-text");
+                        posts.appendChild(div_row);
+                        div_row.appendChild(div_card);
+                        div_card.appendChild(div_card_content);
+                        diV=document.createElement("div");
+                        div_card_content.appendChild(diV);
+                        
+                        hka=document.createElement("h5");
+                        pshka=document.createElement("h6");
+                        div_card_content.appendChild(hka);
+                        div_card_content.appendChild(pshka);
+                        hka.innerHTML=arg[i]["title"];
+                        pshka.innerHTML=arg[i]["description"];
+                        
+                    }
+                },
+                
+                    
+            });
+        });
+        input.oninput=function(){
+            posts.innerHTML="";
+            $.ajax({
+                url:"http://192.168.1.38:8000/search",
+                data:{
+                    searching:input.value,
+                },
+                success:function(arg){
+                    console.log(arg);
+                    posts.innerHTML="";
+                    for (var i=0;i<arg.length;i++){
+                        posts.style.height=arg.length*200+200+"px";
+                        div_row=document.createElement("div");
+                        div_card=document.createElement("div");
+                        div_card_content=document.createElement("div");
+                        div_row.classList.add("row"); 
+                        div_card.classList.add("card","white", "darken-1");
+                        div_card.style.height=170+"px";
+                        div_card.style.width=96+"%";
+                        div_card.style.left=2+"%";
+                       div_card_content.classList.add("card-content","black-text");
+                        posts.appendChild(div_row);
+                        div_row.appendChild(div_card);
+                        div_card.appendChild(div_card_content);
+                        diV=document.createElement("div");
+                        div_card_content.appendChild(diV);
+                        
+                        hka=document.createElement("h5");
+                        pshka=document.createElement("h6");
+                        div_card_content.appendChild(hka);
+                        div_card_content.appendChild(pshka);
+                        hka.innerHTML=arg[i]["title"];
+                        pshka.innerHTML=arg[i]["description"];
+                       
+                    }
+                },
+                    
+            });
+       
+        }
+        
+        
+    </script>
+</body>
+</html>

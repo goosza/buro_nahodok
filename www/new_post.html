@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+     
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection"/>
+    <style>
+    
+    </style>
+</head>
+<body>
+    <nav class="menu teal darken-2"><a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+  
+</nav>
+
+  <ul id="slide-out" class="sidenav">
+    <div class="row">
+      <div class="card">
+        <div class="card-image">
+          <img src="img/binokl.jpg">
+        </div>
+      </div>
+    </div>
+    <li><a href="index.html">Главная</a></li>
+    <li><div class="divider"></div></li>
+    <li><a href="found.html">Найдено</a></li>
+    <li><a href="lost.html">Потеряно</a></li>
+    <li><div class="divider"></div></li>
+    <li><a href="myposts.html">Мои объявления</a></li>
+  </ul>
+  
+  <div class="input-field col s12" style="margin-left:3%; margin-top:8%">
+    <select id="status_input">
+      <option value="" disabled selected>Выберите</option>
+      <option value="0">Найдено</option>
+      <option value="1">Потеряно</option>
+    </select>
+    <label>Статус</label>
+  </div>
+  
+  <div class="row">
+   <form class="col s12">
+      <div class="row">
+        <div class="input-field col s6">
+          
+           <textarea id="textarea1" class="materialize-textarea title"></textarea>
+          <label for="textarea1">Заголовок</label>
+        </div>
+        <div class="input-field col s6">
+          <i class="material-icons prefix">phone</i>
+          <input id="icon_telephone" type="tel" class="number validate" >
+          <label for="icon_telephone">Связь с вами</label>
+        </div>
+      </div>
+    </form>
+      
+      <div class="row">
+        <div class="input-field col s12">
+              <textarea id="textarea1" class="materialize-textarea description"></textarea>
+              <label for="textarea1">Описание</label>
+        </div>
+      </div>
+      
+  </div>
+  <button type="submit" class="btn" style="position:absolute; bottom:0; width:100%; height:8%">Отправить</button>
+  
+   
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js">
+    </script>
+    <script>
+        $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+        $(document).ready(function(){
+    $('select').formSelect();
+  });
+       var status=document.querySelector(".status_input");
+        
+       var btn=document.querySelector(".btn");
+       var a=1; var mas=[];
+       var title=document.querySelector(".title");
+       var description=document.querySelector(".description");
+       var number=document.querySelector(".number");
+       btn.onclick=function(){
+            var post_title=title.value;
+            var post_description=description.value;
+            var post_number=number.value;
+            var post_status=$("#status_input").val();
+            
+           if (post_title=='' || post_description=='' || post_number=='' || post_status==''){
+               alert('Вы некорректно заполнили поля');
+           }
+           else {
+              $.ajax({
+                url:"http://192.168.1.38:8000/insert",
+                data:{
+                    post_title:title.value,
+                    post_description:description.value,
+                    post_number:number.value,
+                    post_status:$("#status_input").val(),
+                },
+                success:function(arg){
+                   if(localStorage.hasOwnProperty("items_id")){
+                        mas = JSON.parse(localStorage.getItem("items_id"));
+                        mas.push(arg)
+                         localStorage.setItem("items_id", JSON.stringify(mas));
+                    }
+                    else{
+                          mas.push(arg)
+                         localStorage.setItem("items_id", JSON.stringify(mas));
+                    }
+                    
+                    
+                    
+                    //var returnMas = JSON.parse(localStorage.getItem("ids"))
+                },    
+            }); 
+           
+               
+           }
+       }
+        
+    
+    </script>
+</body>
+</html>
